@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
@@ -17,6 +18,15 @@ public class EventView implements Serializable {
     String imageSecondaryUrl;
     String eventDateString;
     String location;
+    String documentId;
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
 
     public String getImagePrimaryUrl() {
         return imagePrimaryUrl;

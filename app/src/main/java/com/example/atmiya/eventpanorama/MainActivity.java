@@ -135,20 +135,22 @@ public class MainActivity extends AppCompatActivity
 
     public void initFirebase() {
         try{
+            mProgressBar.setVisibility(View.VISIBLE);
             mFirebaseDatabase = FirebaseDatabase.getInstance();
-            mFirebaseDatabase.setPersistenceEnabled(true);
+            //mFirebaseDatabase.setPersistenceEnabled(true);
 
             databaseReference = mFirebaseDatabase.getReference(FIREBASE_URL);
 
             databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mProgressBar.setVisibility(View.VISIBLE);
+
                 events = new EventView[(int)dataSnapshot.getChildrenCount()];
                 int i=0;
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
                     events[i] = new EventView();
                     events[i] = childDataSnapshot.getValue(EventView.class);
+                    events[i].setDocumentId(childDataSnapshot.getKey());
                     i++;
                 }
                 mEventViewAdapter.setData(events);
