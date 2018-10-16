@@ -1,6 +1,7 @@
 package com.example.atmiya.eventpanorama;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mUserEmail;
     private EventViewAdapter mEventViewAdapter;
+    private ProgressBar mProgressBar;
     EventView[] events;
 
     //Firebase realtime database
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -59,9 +64,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        try{
-        initFirebase();}
-        catch (Exception e){}
+
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+        initFirebase();
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_events_view);
         mEventViewAdapter = new EventViewAdapter(MainActivity.this, MainActivity.this);
         mRecyclerView.setAdapter(mEventViewAdapter);
@@ -129,12 +135,15 @@ public class MainActivity extends AppCompatActivity
 
     public void initFirebase() {
         try{
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = mFirebaseDatabase.getReference(FIREBASE_URL);
+            mFirebaseDatabase = FirebaseDatabase.getInstance();
+            mFirebaseDatabase.setPersistenceEnabled(true);
+
+            databaseReference = mFirebaseDatabase.getReference(FIREBASE_URL);
 
             databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 events = new EventView[(int)dataSnapshot.getChildrenCount()];
                 int i=0;
                 for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
@@ -143,6 +152,7 @@ public class MainActivity extends AppCompatActivity
                     i++;
                 }
                 mEventViewAdapter.setData(events);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
