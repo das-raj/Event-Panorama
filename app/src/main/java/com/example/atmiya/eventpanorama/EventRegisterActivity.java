@@ -3,6 +3,8 @@ package com.example.atmiya.eventpanorama;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ public class EventRegisterActivity extends AppCompatActivity {
     private TextView mEventOneliner;
     private TextView mEventDescription;
     private ImageView mEventCoverPhoto;
+    private Button mEventRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,15 @@ public class EventRegisterActivity extends AppCompatActivity {
         mEventOneliner = (TextView) findViewById(R.id.tv_event_registration_onliner);
         mEventDescription = (TextView) findViewById(R.id.tv_event_registration_description);
         mEventCoverPhoto = (ImageView) findViewById(R.id.imageView2);
+        mEventRegistration = (Button) findViewById(R.id.btn_register);
+        mEventRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(EventRegisterActivity.this, EventRegistrationForm.class);
+                i.putExtra("data",getIntent().getSerializableExtra("data"));
+                startActivity(i);
+            }
+        });
 
         Intent i = getIntent();
         EventView eventData = (EventView) i.getSerializableExtra("data");
