@@ -54,7 +54,7 @@ public class EventRegistrationForm extends AppCompatActivity {
                     map.put("collegeName", registrationCollegeName);
 
                     mDatabaseReference.child("eventRegistrations/" + key).setValue(map);
-                    Toast.makeText(EventRegistrationForm.this, "Submitted Successfully!! Mark the date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EventRegistrationForm.this, "Submitted Successfully!! Mark the date", Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(EventRegistrationForm.this, "Enter data, it is blank", Toast.LENGTH_SHORT).show();
