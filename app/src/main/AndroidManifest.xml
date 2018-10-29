@@ -21,11 +21,14 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
+
+            <!--
+            intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter
+            -->
         </activity>
         <activity android:name=".EventRegisterActivity" />
         <activity android:name=".EventRegistrationForm" />
@@ -34,7 +37,25 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".UserProfileSignUp" />
+        <activity
+            android:name=".SignupTabbed"
+            android:label="SignupTabbed"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".LoginHomeActivity"
+            android:label="@string/title_activity_login_home"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SignupHomeActivity"
+            android:label="@string/title_activity_signup_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

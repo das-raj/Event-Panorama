@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Event Panorama2</string>
-    <string name="title_activity_main">Event Panorama2</string>
+    <string name="app_name">Event Panorama</string>
+    <string name="title_activity_main">Event Panorama</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -25,4 +25,19 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="enter_name">What we should call you?</string>
+    <string name="address">Where do you stay?</string>
+    <string name="college_name">Enter your college Name</string>
+    <string name="contacts">Enter your Mobile No</string>
+    <string name="DOB">Enter Date of Birth</string>
+    <string name="title_activity_login2">Sign in</string>
+    <string name="title_activity_login_proper">LoginProper</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">STUDENT</string>
+    <string name="tab_text_2">COLLEGE</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="title_activity_login_tabbed">LoginTabbed</string>
+    <string name="title_activity_login_home">LoginHomeActivity</string>
+    <string name="title_activity_signup_home">SignupHomeActivity</string>
 </resources>

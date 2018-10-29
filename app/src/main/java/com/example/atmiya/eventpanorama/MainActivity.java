@@ -3,6 +3,7 @@ package com.example.atmiya.eventpanorama;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,13 +21,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.atmiya.eventpanorama.models.CollegeProfile;
 import com.example.atmiya.eventpanorama.models.EventView;
+import com.example.atmiya.eventpanorama.models.StudentProfile;
+import com.example.atmiya.eventpanorama.models.UserProfile;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity
     private TextView mUserEmail;
     private EventViewAdapter mEventViewAdapter;
     private ProgressBar mProgressBar;
+
+    private TextView mUserNameNav;
+    private TextView mUserEmailNav;
+
     EventView[] events;
 
     //Firebase realtime database
@@ -47,16 +56,12 @@ public class MainActivity extends AppCompatActivity
     DatabaseReference databaseReference;
     private String FIREBASE_URL = "/events/";
 
+    //profile
+    UserProfile userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user==null)
-        {
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
 
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -73,6 +78,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        mUserNameNav = (TextView) headerView.findViewById(R.id.tv_nav_name);
+        mUserEmailNav = (TextView) headerView.findViewById(R.id.tv_nav_email);
+        getNavigationUsername();
+        mUserEmailNav.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -181,6 +191,56 @@ public class MainActivity extends AppCompatActivity
         i.putExtra("data",events[position]);
         startActivity(i);
     }
+
+    void getNavigationUsername(){
+        DatabaseReference studentProfile = FirebaseDatabase.getInstance().getReference("studentprofile");
+        DatabaseReference collegeProfile = FirebaseDatabase.getInstance().getReference("collegeprofile");
+
+        Query student = studentProfile.orderByChild("studentId")
+                .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        student.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    StudentProfile profile = childDataSnapshot.getValue(StudentProfile.class);
+                    Toast.makeText(MainActivity.this,"profile "+ profile.getName(), Toast.LENGTH_SHORT).show();
+                    if(profile.getName() != null){
+                        Toast.makeText(MainActivity.this, profile.getName(), Toast.LENGTH_SHORT).show();
+                        mUserNameNav.setText(profile.getName());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+       Query college = collegeProfile.orderByChild("collegeId")
+                            .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        college.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    CollegeProfile profile = childDataSnapshot.getValue(CollegeProfile.class);
+                    if(profile.getName() != null){
+                        Toast.makeText(MainActivity.this, profile.getName(), Toast.LENGTH_SHORT).show();
+                        mUserNameNav.setText(profile.getName());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }
 
 
