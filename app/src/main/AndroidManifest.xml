@@ -54,6 +54,11 @@
             android:name=".SignupHomeActivity"
             android:label="@string/title_activity_signup_home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name="com.example.aarohi.eventpanaroma.CreateEvents"/>
+        <activity android:name="com.example.aarohi.eventpanaroma.CreateEvent2"/>
+        <activity android:name=".UpdateEvents" />
+        <activity android:name=".EventList" />
+        <activity android:name=".Stats" />
     </application>
 
 </manifest>

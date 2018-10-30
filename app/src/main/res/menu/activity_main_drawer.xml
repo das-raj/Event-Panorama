@@ -7,19 +7,23 @@
         <item
             android:id="@+id/nav_create_event"
             android:icon="@drawable/create_event"
-            android:title="Create Event" />
+            android:title="Create Event"
+            android:visible="false" />
         <item
             android:id="@+id/nav_update_event"
             android:icon="@drawable/update_event"
-            android:title="Update Event" />
+            android:title="Update Event"
+            android:visible="false" />
         <item
             android:id="@+id/nav_view_stats"
             android:icon="@drawable/view_stats"
-            android:title="View Stats" />
+            android:title="View Stats"
+            android:visible="false" />
         <item
             android:id="@+id/nav_assign_privileges"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Assign Privileges" />
+            android:title="Assign Privileges"
+            android:visible="false" />
     </group>
     <group>
         <item

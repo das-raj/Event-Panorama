@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.aarohi.eventpanaroma.CreateEvents;
 import com.example.atmiya.eventpanorama.models.CollegeProfile;
 import com.example.atmiya.eventpanorama.models.EventView;
 import com.example.atmiya.eventpanorama.models.StudentProfile;
@@ -59,6 +60,12 @@ public class MainActivity extends AppCompatActivity
     //profile
     UserProfile userProfile;
 
+    //sliding menu options
+    private MenuItem mNavCreateEvent;
+    private MenuItem mNavUpdateEvent;
+    private MenuItem mNavViewStats;
+    private MenuItem mNavAssignPrivileges;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +94,13 @@ public class MainActivity extends AppCompatActivity
             mUserEmailNav = (TextView) headerView.findViewById(R.id.tv_nav_email);
             getNavigationUsername();
             mUserEmailNav.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+            Menu menuNav = navigationView.getMenu();
+            mNavCreateEvent =(MenuItem) menuNav.findItem(R.id.nav_create_event);
+            mNavUpdateEvent =(MenuItem) menuNav.findItem(R.id.nav_update_event);
+            mNavViewStats =(MenuItem) menuNav.findItem(R.id.nav_view_stats);
+            mNavAssignPrivileges =(MenuItem) menuNav.findItem(R.id.nav_assign_privileges);
+            initSlidingBarOptions();
 
             mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -139,13 +153,20 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_create_event) {
-            // Handle the camera action
+            startActivity(new Intent(MainActivity.this, CreateEvents.class));
         } else if (id == R.id.nav_update_event) {
+            startActivity(new Intent(MainActivity.this, EventList.class));
+            RecyclerViewAdapter.activity = "update";
 
         } else if (id == R.id.nav_view_stats) {
+            startActivity(new Intent(MainActivity.this, EventList.class));
+            RecyclerViewAdapter.activity = "stats";
 
         } else if (id == R.id.nav_assign_privileges) {
 
+        } else if (id == R.id.nav_logout){
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity.this, LoginHomeActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -230,6 +251,64 @@ public class MainActivity extends AppCompatActivity
                     if(profile.getName() != null){
                         Toast.makeText(MainActivity.this, profile.getName(), Toast.LENGTH_SHORT).show();
                         mUserNameNav.setText(profile.getName());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    void initSlidingBarOptions(){
+        DatabaseReference studentProfile = FirebaseDatabase.getInstance().getReference("studentprofile");
+        DatabaseReference collegeProfile = FirebaseDatabase.getInstance().getReference("collegeprofile");
+
+        Query student = studentProfile.orderByChild("studentId")
+                .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        student.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    StudentProfile profile = childDataSnapshot.getValue(StudentProfile.class);
+                   if(profile.getName() != null){
+                       Toast.makeText(MainActivity.this, String.valueOf(profile.getPriviliged()), Toast.LENGTH_SHORT).show();
+                       if(profile.getPriviliged() == true){
+                            mNavCreateEvent.setVisible(true);
+                            mNavUpdateEvent.setVisible(true);
+                            mNavViewStats.setVisible(true);
+                    }
+
+                }
+            }
+            }
+
+            /*@Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }*/
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }});
+
+        Query college = collegeProfile.orderByChild("collegeId")
+                .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        college.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                    CollegeProfile profile = childDataSnapshot.getValue(CollegeProfile.class);
+                    if(profile.getName() != null){
+                        mNavCreateEvent.setVisible(true);
+                        mNavUpdateEvent.setVisible(true);
+                        mNavViewStats.setVisible(true);
+                        mNavAssignPrivileges.setVisible(true);
                     }
                 }
             }
