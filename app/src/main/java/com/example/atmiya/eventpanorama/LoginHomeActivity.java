@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginHomeActivity extends AppCompatActivity {
@@ -79,8 +80,8 @@ public class LoginHomeActivity extends AppCompatActivity {
                     startActivity(new Intent(LoginHomeActivity.this, MainActivity.class));
                 } else {
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(LoginHomeActivity.this, "Authentication failed",
-                            Toast.LENGTH_SHORT).show();
+                    FirebaseAuthException e = (FirebaseAuthException )task.getException();
+                    Toast.makeText(LoginHomeActivity.this, "Failed Registration: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
 
                 // ...

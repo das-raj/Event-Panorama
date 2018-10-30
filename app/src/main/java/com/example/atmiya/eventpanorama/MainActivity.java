@@ -63,36 +63,41 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //checking if user authenticated else direct to login activity
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            startActivity(new Intent(MainActivity.this, LoginHomeActivity.class));
+        else {
+            setContentView(R.layout.activity_main);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        mUserNameNav = (TextView) headerView.findViewById(R.id.tv_nav_name);
-        mUserEmailNav = (TextView) headerView.findViewById(R.id.tv_nav_email);
-        getNavigationUsername();
-        mUserEmailNav.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+            View headerView = navigationView.getHeaderView(0);
+            mUserNameNav = (TextView) headerView.findViewById(R.id.tv_nav_name);
+            mUserEmailNav = (TextView) headerView.findViewById(R.id.tv_nav_email);
+            getNavigationUsername();
+            mUserEmailNav.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+            mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        initFirebase();
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_events_view);
-        mEventViewAdapter = new EventViewAdapter(MainActivity.this, MainActivity.this);
-        mRecyclerView.setAdapter(mEventViewAdapter);
-        RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(mLayoutManager1);
-        mEventViewAdapter.setData(events);
+            initFirebase();
+            mRecyclerView = (RecyclerView) findViewById(R.id.rv_events_view);
+            mEventViewAdapter = new EventViewAdapter(MainActivity.this, MainActivity.this);
+            mRecyclerView.setAdapter(mEventViewAdapter);
+            RecyclerView.LayoutManager mLayoutManager1 = new LinearLayoutManager(getApplicationContext());
+            mRecyclerView.setLayoutManager(mLayoutManager1);
+            mEventViewAdapter.setData(events);
+        }
     }
 
     @Override
@@ -133,17 +138,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_create_event) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_update_event) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_view_stats) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_assign_privileges) {
 
         }
 
