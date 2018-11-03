@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity
     private MenuItem mNavViewStats;
     private MenuItem mNavAssignPrivileges;
 
+    //college name
+    String collegeName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,6 +255,7 @@ public class MainActivity extends AppCompatActivity
                     if(profile.getName() != null){
                         Toast.makeText(MainActivity.this, profile.getName(), Toast.LENGTH_SHORT).show();
                         mUserNameNav.setText(profile.getName());
+                        collegeName = profile.getName();
                     }
                 }
             }
